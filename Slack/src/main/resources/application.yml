@@ -1,0 +1,13 @@
+activemq:
+  host: activemq-service
+  port: 61616
+  slackNoteQueue: slackNotify
+  user: ""
+  password: ""
+
+upwork:
+  iconImageUrl: https://www.upwork.com/static/marketing/adquiro-assetic/1fa2629/apple-touch-icon.png
+freelancer:
+  iconImageUrl: http://www.freelancer.com/favicon.ico
+guru:
+  iconImageUrl: http://www.guru.com/favicon.ico

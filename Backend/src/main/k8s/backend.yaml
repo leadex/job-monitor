@@ -1,0 +1,23 @@
+# [START jobmonitor-startup-backend_deployment]
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jobmonitor-startup-backend
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobmonitor-startup-backend-app
+    spec:
+      containers:
+      - name: jobmonitor-startup-guru-cont
+        image: eu.gcr.io/alert-shape-852/startup-jobmonitor-backend:latest
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "0.1"
+# [END jobmonitor-startup-backend_deployment]

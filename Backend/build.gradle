@@ -1,0 +1,89 @@
+buildscript {
+	ext {
+		springBootVersion = '1.4.2.RELEASE'
+		springfoxVersion = '2.5.0'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath 'se.transmode.gradle:gradle-docker:1.2'
+	}
+}
+
+repositories {
+	// Third party dependencies are fetched from MavenCental through a Nexus proxy repository
+	maven {
+		credentials {
+			username "${artifactory_user}"
+			password "${artifactory_password}"
+		}
+		url "${artifactory_contextUrl}/remote-repos/"
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'docker'
+
+jar {
+	baseName = 'jobmonitor-backend'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    // Third party dependencies are fetched from MavenCental through a Nexus proxy repository
+    maven {
+        credentials {
+            username "${artifactory_user}"
+            password "${artifactory_password}"
+        }
+        url "${artifactory_contextUrl}/remote-repos/"
+    }
+}
+
+docker {
+    baseImage 'jboss/base-jdk:8'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = 'eu.gcr.io/alert-shape-852/startup-jobmonitor-backend'
+    version = 'latest'
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+	compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}")
+    compile 'org.springframework.security:spring-security-web:4.2.0.RELEASE'
+    compile 'org.springframework.security:spring-security-config:4.2.0.RELEASE'
+    compile 'org.springframework.security.oauth:spring-security-oauth2:2.0.12.RELEASE'
+
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-joda")
+	compile("joda-time:joda-time")
+
+	compile("com.google.oauth-client:google-oauth-client:1.22.0")
+
+	compile group: 'ru.leadexsystems.startup.jobmonitor', name: 'jobmonitor-common', version: '1.0.0-SNAPSHOT'
+	compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.3.0'
+	
+	compileOnly('org.springframework.boot:spring-boot-starter-tomcat')
+	
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}

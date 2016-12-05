@@ -1,0 +1,22 @@
+guru:
+  delay: 60
+  camelCron: 0/60+*+*+*+*+?
+  apiSearchUrl: http://www.guru.com/rss/jobs/q/
+  pagination:
+    start: 0
+    limit: 100
+
+mongo:
+  host: mongodb-service
+  port: 27017
+  db: jobmonitor
+  login: jobmonitorUser
+  password: ""
+
+activemq:
+  host: activemq-service
+  port: 61616
+  taskQueue: task-guru
+  responseQueue: searchResponse
+  user: ""
+  password: ""

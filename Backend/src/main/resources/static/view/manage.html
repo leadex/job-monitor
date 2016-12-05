@@ -1,0 +1,45 @@
+<div ng-controller="manageController">
+    <md-tabs md-dynamic-height md-border-bottom>
+        <md-tab label="Queries">
+            <md-content class="md-padding">
+                <h2 class="md-title">Upwork</h2>
+                <md-chips ng-model="client.query.upwork" md-removable="true" md-enable-chip-edit="true"></md-chips>
+                <h2 class="md-title">Freelancer</h2>
+                <md-chips ng-model="client.query.freelancer" md-removable="true" md-enable-chip-edit="true"></md-chips>
+                <h2 class="md-title">Guru</h2>
+                <md-chips ng-model="client.query.guru" md-removable="true" md-enable-chip-edit="true"></md-chips>
+            </md-content>
+        </md-tab>
+        <md-tab label="Notifications">
+            <md-content class="md-padding">
+                <div class="slackNotification">
+                    <h2 class="md-title">Slack</h2>
+                    <a href="#/manage"  ng-show="!client.notification.slack.webHook">
+                        <img alt="Add to Slack" src="https://platform.slack-edge.com/img/add_to_slack.png"/>
+                    </a>
+                    <div class="slackParams">
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Web hook</label>
+                            <input ng-model="client.notification.slack.webHook">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Channel</label>
+                            <input ng-model="client.notification.slack.channel">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Bot name</label>
+                            <input ng-model="client.notification.slack.botName">
+                        </md-input-container>
+                        <md-input-container class="md-block" flex-gt-sm="">
+                            <label>Bot icon Emoji</label>
+                            <input ng-model="client.notification.slack.iconEmoji">
+                        </md-input-container>
+                    </div>
+                </div>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+    <div>
+        <md-button class="md-raised md-primary" ng-click="saveClient()">Save</md-button>
+    </div>
+</div>

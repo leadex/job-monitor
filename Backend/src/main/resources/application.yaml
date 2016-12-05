@@ -1,0 +1,69 @@
+oauth2-conf:
+  redirectUri: ""
+  providers:
+    - name: google
+      client:
+        clientId: ""
+        clientSecret: ""
+        accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+        userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+        useCurrentUri: true
+        tokenName: access_token
+        authenticationScheme: query
+        clientAuthenticationScheme: form
+        scope:
+          - openid
+          - email
+          - profile
+      resource:
+        userInfoUri: https://www.googleapis.com/plus/v1/people/me
+    - name: slack
+      principalExtractor: OAuthSlackPrincipalExtractor
+      client:
+        clientId: ""
+        clientSecret: ""
+        accessTokenUri: https://slack.com/api/oauth.access
+        userAuthorizationUri: https://slack.com/oauth/authorize
+        useCurrentUri: true
+        tokenName: token
+        authenticationScheme: query
+        clientAuthenticationScheme: form
+        scope:
+          - identity.basic
+      resource:
+        userInfoUri: https://slack.com/api/users.identity
+    - name: slack-add
+      principalExtractor: OAuthSlackPrincipalExtractor
+      client:
+        clientId: ""
+        clientSecret: ""
+        accessTokenUri: https://slack.com/api/oauth.access
+        userAuthorizationUri: https://slack.com/oauth/authorize
+        useCurrentUri: true
+        tokenName: token
+        authenticationScheme: query
+        clientAuthenticationScheme: form
+        scope:
+          - incoming-webhook
+      resource:
+        userInfoUri: https://slack.com/api/users.identity
+    - name: linkedin
+      client:
+        clientId: ""
+        clientSecret: ""
+        accessTokenUri: https://www.linkedin.com/oauth/v2/accessToken
+        userAuthorizationUri: https://www.linkedin.com/oauth/v2/authorization
+        useCurrentUri: true
+        tokenName: token
+        authenticationScheme: header
+        clientAuthenticationScheme: form
+        scope:
+          - r_basicprofile
+      resource:
+        userInfoUri: https://api.linkedin.com/v1/people/~?format=json
+mongo:
+  host: mongodb-service
+  port: 27017
+  db: jobmonitor
+  login: jobmonitorUser
+  password: ""

@@ -1,0 +1,79 @@
+buildscript {
+    ext {
+        camelVersion = '2.18.0'
+        projectGroupId = 'ru.leadexsystems.startup.jobmonitor'
+        projectArtifactId = 'jobmonitor-common'
+        projectVersion = '1.0.0-SNAPSHOT'
+     }
+    repositories {
+        maven {
+            url "${artifactory_contextUrl}/plugins-release"
+            credentials {
+                username = "${artifactory_user}"
+                password = "${artifactory_password}"
+            }
+        }
+
+    }
+    dependencies {
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.4.7"
+    }
+}
+
+allprojects {
+    apply plugin: "com.jfrog.artifactory"
+    apply plugin: 'java'
+    apply plugin: "maven-publish"
+
+    group = "${projectGroupId}"
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"   //The base Artifactory URL if not overridden by the publisher/resolver
+    publish {
+        repository {
+            repoKey = 'libs-snapshot-local'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+        defaults {
+            publications ('mavenJava')
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'libs-snapshot'
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+            maven = true
+
+        }
+    }
+}
+
+jar {
+    baseName = "${projectArtifactId}"
+    version = "${projectVersion}"
+}
+
+dependencies {
+    compile group: 'org.apache.camel', name: 'camel-slack', version: "${camelVersion}"
+    compile group: 'junit', name: 'junit', version: '4.4'
+    compile group: 'org.mockito', name: 'mockito-all', version: '1.10.8'
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.0'
+    compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.3.0'
+    compile 'org.mongodb.morphia:morphia:1.2.1'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            group = "${projectGroupId}"
+            artifactId = "${projectArtifactId}"
+            version = "${projectVersion}"
+            from components.java
+        }
+    }
+}

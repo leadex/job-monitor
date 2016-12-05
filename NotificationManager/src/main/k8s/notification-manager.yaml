@@ -1,0 +1,21 @@
+# [START jobmonitor-startup-notification-manager_deployment]
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jobmonitor-startup-notification-manager
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobmonitor-startup-notification-manager-app
+    spec:
+      containers:
+      - name: jobmonitor-startup-guru-cont
+        image: eu.gcr.io/alert-shape-852/startup-jobmonitor-notification-manager:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "0.1"
+# [END jobmonitor-startup-notification-manager_deployment]

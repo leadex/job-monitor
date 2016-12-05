@@ -1,0 +1,25 @@
+upwork:
+  delay: 60
+  camelCron: 0/60+*+*+*+*+?
+  key: ""
+  secret: ""
+  token: ""
+  tokenSecret: ""
+  pagination:
+    start: 0
+    limit: 100
+
+mongo:
+  host: mongodb-service
+  port: 27017
+  db: jobmonitor
+  login: jobmonitorUser
+  password: ""
+
+activemq:
+  host: activemq-service
+  port: 61616
+  slackNoteQueue: slackNotify
+  responseQueue: searchResponse
+  user: ""
+  password: ""

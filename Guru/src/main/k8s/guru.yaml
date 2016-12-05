@@ -1,0 +1,21 @@
+# [START jobmonitor-startup-guru_deployment]
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jobmonitor-startup-guru
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobmonitor-startup-guru-app
+    spec:
+      containers:
+      - name: jobmonitor-startup-guru-cont
+        image: eu.gcr.io/alert-shape-852/startup-jobmonitor-guru:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "0.05"
+# [END jobmonitor-startup-guru_deployment]

@@ -1,0 +1,21 @@
+# [START jobmonitor-startup-upwork_deployment]
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: jobmonitor-startup-upwork
+  namespace: default
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: jobmonitor-startup-upwork-app
+    spec:
+      containers:
+      - name: jobmonitor-startup-guru-cont
+        image: eu.gcr.io/alert-shape-852/startup-jobmonitor-upwork:latest
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "0.05"
+# [END jobmonitor-startup-upwork_deployment]

@@ -1,0 +1,18 @@
+# [START jobmonitor-startup-backend_service]
+---
+  kind: Service
+  apiVersion: v1
+  metadata:
+    name: jobmonitor-startup-backend-service
+    namespace: default
+  spec:
+  # ClusterIP NodePort LoadBalancer -- http://kubernetes.io/docs/user-guide/services/
+    type: LoadBalancer
+    selector:
+      app: jobmonitor-startup-backend-app
+    ports:
+      - protocol: TCP
+        port: 80
+        targetPort: 8080
+        name: http
+# [END jobmonitor-startup-backend_service_proxy]

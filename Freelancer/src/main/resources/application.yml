@@ -1,0 +1,22 @@
+freelancer:
+  delay: 60
+  camelCron: 0/60+*+*+*+*+?
+  apiSearchUrl: https://www.freelancer.com/api/projects/0.1/projects/active/
+  pagination:
+    start: 0
+    limit: 100
+
+mongo:
+  host: mongodb-service
+  port: 27017
+  db: jobmonitor
+  login: jobmonitorUser
+  password: ""
+
+activemq:
+  host: activemq-service
+  port: 61616
+  taskQueue: task-freelancer
+  responseQueue: searchResponse
+  user: ""
+  password: ""

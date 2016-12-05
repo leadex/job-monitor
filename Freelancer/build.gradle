@@ -1,0 +1,84 @@
+buildscript {
+    ext {
+        springBootVersion = '1.3.5.RELEASE'
+        camelVersion = '2.18.0'
+        activemqVersion = '5.13.0'
+    }
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'docker'
+
+jar {
+    baseName = 'jobmonitor-freelancer'
+    version = '1.0.0-SNAPSHOT'
+}
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    // Third party dependencies are fetched from MavenCental through a Nexus proxy repository
+    maven {
+        credentials {
+            username "${artifactory_user}"
+            password "${artifactory_password}"
+        }
+        url "${artifactory_contextUrl}/remote-repos/"
+    }
+}
+
+docker {
+    baseImage 'jboss/base-jdk:8'
+}
+
+task buildDocker(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = 'eu.gcr.io/alert-shape-852/startup-jobmonitor-freelancer'
+    version = 'latest'
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+configurations.all {
+    // Check for updates every build
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile("org.apache.camel:camel-spring-boot-starter:${camelVersion}")
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}")
+    compile("org.apache.camel:camel-jetty:${camelVersion}")
+    compile("org.apache.camel:camel-servlet:${camelVersion}")
+    compile("org.apache.camel:camel-http:${camelVersion}")
+    compile("org.apache.camel:camel-swagger-java:${camelVersion}")
+    compile("org.apache.camel:camel-jackson:${camelVersion}")
+
+    compile group: 'org.apache.camel', name: 'camel-quartz2', version: "${camelVersion}"
+    compile group: 'org.apache.camel', name: 'camel-jms', version: "${camelVersion}"
+
+    compile group: 'org.apache.activemq', name: 'activemq-camel', version: "${activemqVersion}"
+    compile group: 'org.apache.activemq', name: 'activemq-pool', version: "${activemqVersion}"
+    compile group: 'org.apache.activemq', name: 'activemq-client', version: "${activemqVersion}"
+
+    compile group: 'com.Upwork', name: 'api', version: '1.0.1'
+    compile group: 'junit', name: 'junit', version: '4.4'
+    compile group: 'org.mockito', name: 'mockito-all', version: '1.10.8'
+    compile group: 'ru.leadexsystems.startup.jobmonitor', name: 'jobmonitor-common', version: '1.0.0-SNAPSHOT'
+    compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.3.0'
+
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+}
